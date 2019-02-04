@@ -1,0 +1,14 @@
+2019-02-01
+First meeting with our TA (Vasileios Athanasiou).
+Discussed our topic, get instruction on following steps.
+TA suggested us to do below things for next week:
+1) Find a dataset (large enough sample size, divide to training/validation/test data);
+2) Read about convolutional neural network to have a better understanding of the theory;
+3) Choose software platform. Python use Tensorflow?
+
+
+2019-02-04      8:30~12:00
+Group study. Plan for today:
+1) install Anaconda software(python 3.5) and machine learning pakcage keras and tensorflow.
+2) Divide the dataset we choose for flower classification to three parts.
+3)
