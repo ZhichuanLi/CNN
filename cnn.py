@@ -1,3 +1,8 @@
+# TIN175-AI-Project  
+# Group Pong
+# dataset used in this program: https://www.kaggle.com/alxmamaev/flowers-recognition/version/2
+# We use convolotional neural network to classify five kinds of flowers.
+
 # Part 1 - Building the CNN
 
 # Importing the Keras libraries and packages
@@ -56,4 +61,7 @@ classifier.fit_generator(training_set,
                          nb_epoch = 10,
                          validation_data = test_set,
                          nb_val_samples = 868)
+
+
+
 
