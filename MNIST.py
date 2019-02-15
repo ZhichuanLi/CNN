@@ -5,7 +5,6 @@ Created on Fri Feb  1 15:45:42 2019
 @Source Article: 
     https://towardsdatascience.com/image-classification-in-10-minutes-with-mnist-dataset-54c35b77a38d
 
-@author: lizhichuan
 """
 
 # Downloading the Mnist Data
@@ -30,7 +29,6 @@ plt.imshow(x_train[image_index], cmap='Greys')
 # Reshaping the array to 4-dims so that it can work with the Keras API
 x_train = x_train.reshape(x_train.shape[0], 28, 28, 1)
 x_test = x_test.reshape(x_test.shape[0], 28, 28, 1)
-input_shape = (28, 28, 1)
 
 # Making sure that the values are float so that we can get decimal points after division
 x_train = x_train.astype('float32')
@@ -47,7 +45,7 @@ print('Number of images in x_test', x_test.shape[0])
 
 # Creating a Sequential Model and adding the layers
 model = Sequential()
-model.add(Conv2D(28, kernel_size=(3,3), input_shape=input_shape))
+model.add(Conv2D(28, kernel_size=(3,3), input_shape=(28, 28, 1)))
 model.add(MaxPooling2D(pool_size=(2, 2)))
 
 # Flattening the 2D arrays for fully connected layers
