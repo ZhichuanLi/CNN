@@ -13,7 +13,7 @@
 # 2019.02.19 Add part 5: save trained model to files
 
 # Questions: how to keep the trained model for later testing purpose?
-#            save model as a file and imported to another file.
+#            save model as a file and imported to another file.  --solved at 02.19
 # Keep all the logs!
 
 # Part 1 - Building the CNN
@@ -38,12 +38,13 @@ datagen = ImageDataGenerator(rescale = 1./255,
 
 validation_datagen = ImageDataGenerator(rescale = 1./255)
 
-training_set = datagen.flow_from_directory(r'dataset\training',
+# make sure the parent folder contains the dataset folder
+training_set = datagen.flow_from_directory(r'..\dataset\training',
                                                  target_size = (64, 64),
-                                                 batch_size = 64,
+                                                 batch_size = 32,
                                                  class_mode = 'categorical')
 
-validation_set = validation_datagen.flow_from_directory(r'dataset\testing',
+validation_set = validation_datagen.flow_from_directory(r'..\dataset\testing',
                                             target_size = (64, 64),
                                             batch_size = 32,
                                             class_mode = 'categorical')
@@ -83,13 +84,13 @@ History = model.fit_generator(training_set,
 # Part 4: Evaluate the model performance
 
 #Model loss
-plt.plot(History.history['loss'])
-plt.plot(History.history['val_loss'])
-plt.title('Model Loss')
-plt.ylabel('Loss')
-plt.xlabel('Epochs')
-plt.legend(['train', 'validation'])
-plt.show()
+#plt.plot(History.history['loss'])
+#plt.plot(History.history['val_loss'])
+#plt.title('Model Loss')
+#plt.ylabel('Loss')
+#plt.xlabel('Epochs')
+#plt.legend(['train', 'validation'])
+#plt.show()
 
 #Model accuracy
 plt.plot(History.history['acc'])
@@ -109,8 +110,7 @@ with open("model.json", "w") as json_file:
     
 # serialize weights to HDF5
 model.save_weights("model.h5")
-print("Saved model to disk")
+print("Save cnn model to disk")
 
-# Part 5: Predicting new images
-
-# Testing: predict new flower image --> another py file
+# Part 6: Predicting new images
+# see cnnPredict.py file
