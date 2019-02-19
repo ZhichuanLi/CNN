@@ -10,6 +10,7 @@
 #            cross-validation
 #            learning rate?
 # 2019.02.15 Adding plot to show loss and accuracy
+# 2019.02.19 Add part 5: save trained model to files
 
 # Questions: how to keep the trained model for later testing purpose?
 #            save model as a file and imported to another file.
@@ -26,7 +27,28 @@ from keras.layers import Dense
 from keras.preprocessing.image import ImageDataGenerator
 import matplotlib.pyplot as plt
 
-# Initialise the CNN model
+# Part 1: Processing the data
+#print(os.listdir("dataset/training"))
+
+#Data augmentation (seprate dataset to traing, validation and testing)
+datagen = ImageDataGenerator(rescale = 1./255,
+                                   shear_range = 0.2,
+                                   zoom_range = 0.2,
+                                   horizontal_flip = True)
+
+validation_datagen = ImageDataGenerator(rescale = 1./255)
+
+training_set = datagen.flow_from_directory(r'dataset\training',
+                                                 target_size = (64, 64),
+                                                 batch_size = 64,
+                                                 class_mode = 'categorical')
+
+validation_set = validation_datagen.flow_from_directory(r'dataset\testing',
+                                            target_size = (64, 64),
+                                            batch_size = 32,
+                                            class_mode = 'categorical')
+
+# Part 2: Initialise the CNN model
 model = Sequential()
 
 # Step 1 - Add Convolutional layer
@@ -51,37 +73,14 @@ model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = [
 
 model.summary()
 
-#Data augmentation (seprate dataset to traing, validation and testing)
-datagen = ImageDataGenerator(rescale = 1./255,
-                                   shear_range = 0.2,
-                                   zoom_range = 0.2,
-                                   horizontal_flip = True)
-
-#validation_datagen = ImageDataGenerator(rescale = 1./255)
-
-training_set = datagen.flow_from_directory(r'dataset\training',
-                                                 target_size = (64, 64),
-                                                 batch_size = 64,
-                                                 class_mode = 'categorical')
-
-validation_set = datagen.flow_from_directory(r'dataset\validation',
-                                            target_size = (64, 64),
-                                            batch_size = 32,
-                                            class_mode = 'categorical')
-
-testing_set = datagen.flow_from_directory(r'dataset\testing',
-                                            target_size = (64, 64),
-                                            batch_size = 32,
-                                            class_mode = 'categorical')
-
-# Part 2 - Fitting the CNN to the images
+# Part 3 - Fitting the CNN to the images
 History = model.fit_generator(training_set,
                              samples_per_epoch = 2589,
                              nb_epoch = 10,
                              validation_data = validation_set,
                              nb_val_samples = 868)
 
-# Evaluate the model performance
+# Part 4: Evaluate the model performance
 
 #Model loss
 plt.plot(History.history['loss'])
@@ -101,7 +100,17 @@ plt.xlabel('Epochs')
 plt.legend(['train', 'validation'])
 plt.show()
 
-# Testing: predict new flower image
-# code to be written here...
+# Part 5: save trained model
 
+# serialize model to JSON
+model_json = model.to_json()
+with open("model.json", "w") as json_file:
+    json_file.write(model_json)
+    
+# serialize weights to HDF5
+model.save_weights("model.h5")
+print("Saved model to disk")
 
+# Part 5: Predicting new images
+
+# Testing: predict new flower image --> another py file
