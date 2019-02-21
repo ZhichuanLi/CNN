@@ -5,6 +5,7 @@ Created on Tue Feb 19 13:29:08 2019
 Using saved CNN model to predicting new image
 
 2019.02.19 create file
+2019.02.21 change image size for testing since cnn model has been retained.
 
 @author: lizhichuan
 """
@@ -34,12 +35,12 @@ print("Load trained cnn model from disk")
 test_datagen = ImageDataGenerator(rescale = 1./255)
 
 test_set = test_datagen.flow_from_directory(r'..\dataset\testing',
-                                           target_size = (64, 64),
+                                           target_size = (150, 150),
                                            batch_size = 867,
                                            class_mode = 'categorical')
 
 x_test, y_test = test_set.next()
-x_test = x_test.reshape(x_test.shape[0], 64, 64, 3)
+x_test = x_test.reshape(x_test.shape[0], 150, 150, 3)
 
 maximum_index = len(x_test) -1
 # index maximum 866 (867 images in testing dataset)
@@ -50,7 +51,7 @@ print("You input number "+ str(image_index) + " as index of image.")
 print("The Actual flower label is:")
 print(y_test[image_index]) 
 
-pred = loaded_model.predict(x_test[image_index].reshape(1, 64, 64, 3))
+pred = loaded_model.predict(x_test[image_index].reshape(1, 150, 150, 3))
 print("The predicted flower label is:")
 print(pred.argmax())
 

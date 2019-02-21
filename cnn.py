@@ -11,6 +11,7 @@
 #            learning rate?
 # 2019.02.15 Adding plot to show loss and accuracy
 # 2019.02.19 Add part 5: save trained model to files
+# 2019.02.21 Add more layers and change image size to increase accurancy of cnn model
 
 # Questions: how to keep the trained model for later testing purpose?
 #            save model as a file and imported to another file.  --solved at 02.19
@@ -40,26 +41,29 @@ validation_datagen = ImageDataGenerator(rescale = 1./255)
 
 # make sure the parent folder contains the dataset folder
 training_set = datagen.flow_from_directory(r'..\dataset\training',
-                                                 target_size = (64, 64),
-                                                 batch_size = 32,
+                                                 target_size = (150, 150),
+                                                 batch_size = 10,
                                                  class_mode = 'categorical')
 
 validation_set = validation_datagen.flow_from_directory(r'..\dataset\testing',
-                                            target_size = (64, 64),
-                                            batch_size = 32,
+                                            target_size = (150, 150),
+                                            batch_size = 10,
                                             class_mode = 'categorical')
 
 # Part 2: Initialise the CNN model
 model = Sequential()
 
 # Step 1 - Add Convolutional layer
-model.add(Convolution2D(16, kernel_size=(3,3), input_shape = (64, 64, 3), activation = 'relu'))
+model.add(Convolution2D(32, kernel_size=(3,3), input_shape = (150, 150, 3), activation = 'relu'))
 
 # Step 2 - Add Pooling layer
 model.add(MaxPooling2D(pool_size = (2, 2)))
 
 # Adding a second convolutional layer and pooling layer
-model.add(Convolution2D(16, kernel_size=(3,3), activation = 'relu'))
+model.add(Convolution2D(32, kernel_size=(3,3), activation = 'relu'))
+model.add(MaxPooling2D(pool_size = (2, 2)))
+
+model.add(Convolution2D(64, kernel_size=(3,3), activation = 'relu'))
 model.add(MaxPooling2D(pool_size = (2, 2)))
 
 # Step 3 - Flattening
@@ -110,7 +114,7 @@ with open("model.json", "w") as json_file:
     
 # serialize weights to HDF5
 model.save_weights("model.h5")
-print("Save cnn model to disk")
+print("Saved cnn model to disk.")
 
 # Part 6: Predicting new images
 # see cnnPredict.py file
