@@ -32,21 +32,21 @@ import matplotlib.pyplot as plt
 
 #Data augmentation (seprate dataset to traing, validation and testing)
 datagen = ImageDataGenerator(rescale = 1./255,
+                             validation_split=0.15,
                                    shear_range = 0.2,
                                    zoom_range = 0.2,
                                    horizontal_flip = True)
 
-validation_datagen = ImageDataGenerator(rescale = 1./255)
-
 # make sure the parent folder contains the dataset folder
-training_set = datagen.flow_from_directory(r'..\dataset\training',
+training_set = datagen.flow_from_directory(r'..\dataset',
+                                                 subset="training",
                                                  target_size = (64, 64),
-                                                 batch_size = 32,
+                                                 batch_size = 16,
                                                  class_mode = 'categorical')
 
-validation_set = validation_datagen.flow_from_directory(r'..\dataset\testing',
+validation_set = datagen.flow_from_directory(r'..\dataset',
+                                            subset="validation",
                                             target_size = (64, 64),
-                                            batch_size = 32,
                                             class_mode = 'categorical')
 
 # Part 2: Initialise the CNN model
@@ -66,8 +66,8 @@ model.add(MaxPooling2D(pool_size = (2, 2)))
 model.add(Flatten())
 
 # Step 4 - Full connection
-model.add(Dense(output_dim = 128, activation = 'relu'))
-model.add(Dense(output_dim = 5, activation = 'softmax'))
+model.add(Dense(output_dim = 256, activation = 'relu'))
+model.add(Dense(output_dim = 4, activation = 'softmax'))
 
 # Compiling the CNN
 model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
@@ -76,10 +76,10 @@ model.summary()
 
 # Part 3 - Fitting the CNN to the images
 History = model.fit_generator(training_set,
-                             samples_per_epoch = 2589,
+                             samples_per_epoch = 2721,
                              nb_epoch = 10,
                              validation_data = validation_set,
-                             nb_val_samples = 868)
+                             nb_val_samples = 478)
 
 # Part 4: Evaluate the model performance
 
