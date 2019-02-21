@@ -39,12 +39,12 @@ datagen = ImageDataGenerator(rescale = 1./255,
 validation_datagen = ImageDataGenerator(rescale = 1./255)
 
 # make sure the parent folder contains the dataset folder
-training_set = datagen.flow_from_directory(r'..\dataset\training',
+training_set = datagen.flow_from_directory(r'C:\Users\SurfacePro4\Google Drive\Chalmers\Y1P3\Intro to ML\project\real_dataset\training',
                                                  target_size = (64, 64),
                                                  batch_size = 32,
                                                  class_mode = 'categorical')
 
-validation_set = validation_datagen.flow_from_directory(r'..\dataset\testing',
+validation_set = validation_datagen.flow_from_directory(r'C:\Users\SurfacePro4\Google Drive\Chalmers\Y1P3\Intro to ML\project\real_dataset\testing',
                                             target_size = (64, 64),
                                             batch_size = 32,
                                             class_mode = 'categorical')
@@ -77,7 +77,7 @@ model.summary()
 # Part 3 - Fitting the CNN to the images
 History = model.fit_generator(training_set,
                              samples_per_epoch = 2589,
-                             nb_epoch = 10,
+                             nb_epoch = 30,
                              validation_data = validation_set,
                              nb_val_samples = 868)
 
