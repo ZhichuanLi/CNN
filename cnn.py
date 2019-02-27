@@ -63,44 +63,26 @@ for i in range(10):
 
 # Part 2: Initialise the CNN model
 model = Sequential()
-model.add(Convolution2D(64, kernel_size=(4,4), input_shape = (img_size, img_size, 3), activation = 'relu'))
-model.add(BatchNormalization())
-model.add(MaxPooling2D(pool_size = (2, 2)))
-model.add(Dropout(0.2))
-model.add(Convolution2D(128, kernel_size=(3,3), activation = 'relu'))
-model.add(BatchNormalization())
-model.add(MaxPooling2D(pool_size = (2, 2)))
-model.add(Dropout(0.2))
-model.add(Convolution2D(256, kernel_size=(3,3), activation = 'relu'))
-model.add(BatchNormalization())
-model.add(MaxPooling2D(pool_size = (2, 2)))
-model.add(Dropout(0.2))
-model.add(Convolution2D(512, kernel_size=(3,3), activation = 'relu'))
-model.add(BatchNormalization())
-model.add(MaxPooling2D(pool_size = (2, 2)))
-model.add(Dropout(0.2))
-model.add(Convolution2D(512, kernel_size=(3,3), activation = 'relu'))
-model.add(BatchNormalization())
-model.add(MaxPooling2D(pool_size = (2, 2)))
-model.add(Dropout(0.2))
+model.add(Convolution2D(32, (3, 3), input_shape=(img_size, img_size, 3),activation = 'relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 
+model.add(Convolution2D(32, (3, 3),activation = 'relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 
-# Step 3 - Flattening
-model.add(Flatten())
+model.add(Convolution2D(64, (3, 3),activation = 'relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 
-# Step 4 - Full connection
-model.add(Dense(output_dim = 512, activation = 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(output_dim = 256, activation = 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(output_dim = 128, activation = 'relu'))
-model.add(Dropout(0.2))
-model.add(Dense(output_dim = 4, activation = 'softmax'))
+model.add(Flatten())  # this converts our 3D feature maps to 1D feature vectors
+model.add(Dense(64, activation = 'relu'))
+model.add(Dropout(0.5))
+model.add(Dense(4,activation = 'sigmoid'))
 
-# Compiling the CNN
-model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
+model.compile(loss='binary_crossentropy',
+              optimizer='rmsprop',
+              metrics=['accuracy'])
 
 model.summary()
+
         
 plt.tight_layout()
 
