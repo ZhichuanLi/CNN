@@ -24,15 +24,20 @@ from keras.layers import Convolution2D
 from keras.layers import MaxPooling2D
 from keras.layers import Flatten
 from keras.layers import Dense
+from keras.layers import Dropout
+from keras.layers import BatchNormalization
 from keras.preprocessing.image import ImageDataGenerator
 import matplotlib.pyplot as plt
+
+img_size = 128
 
 # Part 1: Processing the data
 #print(os.listdir("dataset/training"))
 
 #Data augmentation (seprate dataset to traing, validation and testing)
 datagen = ImageDataGenerator(rescale = 1./255,
-                             validation_split=0.15,
+                             validation_split=0.2,
+                             rotation_range=30,
                                    shear_range = 0.2,
                                    zoom_range = 0.2,
                                    horizontal_flip = True)
@@ -40,46 +45,55 @@ datagen = ImageDataGenerator(rescale = 1./255,
 # make sure the parent folder contains the dataset folder
 training_set = datagen.flow_from_directory(r'..\dataset',
                                                  subset="training",
-                                                 target_size = (64, 64),
-                                                 batch_size = 16,
+                                                 batch_size = 64,
+                                                 target_size = (img_size, img_size),
                                                  class_mode = 'categorical')
 
 validation_set = datagen.flow_from_directory(r'..\dataset',
                                             subset="validation",
-                                            target_size = (64, 64),
+                                            target_size = (img_size, img_size),
                                             class_mode = 'categorical')
 
 # Part 2: Initialise the CNN model
 model = Sequential()
 
-# Step 1 - Add Convolutional layer
-model.add(Convolution2D(16, kernel_size=(3,3), input_shape = (64, 64, 3), activation = 'relu'))
-
-# Step 2 - Add Pooling layer
+model.add(Convolution2D(32, kernel_size=(4,4), input_shape = (img_size, img_size, 3), activation = 'relu'))
+model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size = (2, 2)))
-
-# Adding a second convolutional layer and pooling layer
-model.add(Convolution2D(16, kernel_size=(3,3), activation = 'relu'))
+model.add(Dropout(0.2))
+model.add(Convolution2D(64, kernel_size=(3,3), activation = 'relu'))
+model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size = (2, 2)))
+model.add(Dropout(0.2))
+model.add(Convolution2D(128, kernel_size=(3,3), activation = 'relu'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size = (2, 2)))
+model.add(Dropout(0.2))
 
 # Step 3 - Flattening
 model.add(Flatten())
 
 # Step 4 - Full connection
 model.add(Dense(output_dim = 256, activation = 'relu'))
+model.add(Dropout(0.2))
+model.add(Dense(output_dim = 128, activation = 'relu'))
+model.add(Dropout(0.2))
 model.add(Dense(output_dim = 4, activation = 'softmax'))
 
 # Compiling the CNN
 model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
 
 model.summary()
+        
+plt.tight_layout()
 
 # Part 3 - Fitting the CNN to the images
 History = model.fit_generator(training_set,
-                             samples_per_epoch = 2721,
-                             nb_epoch = 10,
-                             validation_data = validation_set,
-                             nb_val_samples = 478)
+                              steps_per_epoch = len(training_set),
+                              nb_epoch = 50,
+                              validation_data = validation_set,
+                              validation_steps = len(validation_set)
+                             )
 
 # Part 4: Evaluate the model performance
 
