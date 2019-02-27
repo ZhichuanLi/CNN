@@ -77,8 +77,8 @@ model.add(Dense(64, activation = 'relu'))
 model.add(Dropout(0.5))
 model.add(Dense(4,activation = 'sigmoid'))
 
-model.compile(loss='binary_crossentropy',
-              optimizer='rmsprop',
+model.compile(loss='categorical_crossentropy',
+              optimizer='adam',
               metrics=['accuracy'])
 
 model.summary()
