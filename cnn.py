@@ -54,14 +54,16 @@ validation_set = datagen.flow_from_directory(r'..\dataset',
                                             target_size = (img_size, img_size),
                                             class_mode = 'categorical')
 
+x, y = training_set.next()
+for i in range(10):
+    print(y[i])
+    plt.imshow(x[i])
+    plt.show()
+
+
 # Part 2: Initialise the CNN model
 model = Sequential()
-
-model.add(Convolution2D(32, kernel_size=(4,4), input_shape = (img_size, img_size, 3), activation = 'relu'))
-model.add(BatchNormalization())
-model.add(MaxPooling2D(pool_size = (2, 2)))
-model.add(Dropout(0.2))
-model.add(Convolution2D(64, kernel_size=(3,3), activation = 'relu'))
+model.add(Convolution2D(64, kernel_size=(4,4), input_shape = (img_size, img_size, 3), activation = 'relu'))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size = (2, 2)))
 model.add(Dropout(0.2))
@@ -69,11 +71,26 @@ model.add(Convolution2D(128, kernel_size=(3,3), activation = 'relu'))
 model.add(BatchNormalization())
 model.add(MaxPooling2D(pool_size = (2, 2)))
 model.add(Dropout(0.2))
+model.add(Convolution2D(256, kernel_size=(3,3), activation = 'relu'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size = (2, 2)))
+model.add(Dropout(0.2))
+model.add(Convolution2D(512, kernel_size=(3,3), activation = 'relu'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size = (2, 2)))
+model.add(Dropout(0.2))
+model.add(Convolution2D(512, kernel_size=(3,3), activation = 'relu'))
+model.add(BatchNormalization())
+model.add(MaxPooling2D(pool_size = (2, 2)))
+model.add(Dropout(0.2))
+
 
 # Step 3 - Flattening
 model.add(Flatten())
 
 # Step 4 - Full connection
+model.add(Dense(output_dim = 512, activation = 'relu'))
+model.add(Dropout(0.2))
 model.add(Dense(output_dim = 256, activation = 'relu'))
 model.add(Dropout(0.2))
 model.add(Dense(output_dim = 128, activation = 'relu'))
