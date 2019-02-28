@@ -26,48 +26,50 @@ from keras.layers import Flatten
 from keras.layers import Dense
 from keras.preprocessing.image import ImageDataGenerator
 import matplotlib.pyplot as plt
+import scipy.ndimage
 
 # Part 1: Processing the data
 #print(os.listdir("dataset/training"))
 
 #Data augmentation (seprate dataset to traing, validation and testing)
 datagen = ImageDataGenerator(rescale = 1./255,
-                                   shear_range = 0.2,
-                                   zoom_range = 0.2,
-                                   horizontal_flip = True)
+                             shear_range = 0.2,
+                             zoom_range = 0.2,
+                             horizontal_flip = True,
+                             validation_split=0.2)
 
 validation_datagen = ImageDataGenerator(rescale = 1./255)
 
 # make sure the parent folder contains the dataset folder
-training_set = datagen.flow_from_directory(r'C:\Users\SurfacePro4\Google Drive\Chalmers\Y1P3\Intro to ML\project\real_dataset\training',
-                                                 target_size = (64, 64),
-                                                 batch_size = 32,
-                                                 class_mode = 'categorical')
+training_set = datagen.flow_from_directory(r'C:\Users\SurfacePro4\Desktop\dataset\flowers',
+                                                 target_size = (150, 150),
+                                                 batch_size = 64,
+                                                 class_mode = 'categorical',
+                                                 subset = 'training')
 
-validation_set = validation_datagen.flow_from_directory(r'C:\Users\SurfacePro4\Google Drive\Chalmers\Y1P3\Intro to ML\project\real_dataset\testing',
-                                            target_size = (64, 64),
-                                            batch_size = 32,
-                                            class_mode = 'categorical')
+validation_set = datagen.flow_from_directory(r'C:\Users\SurfacePro4\Desktop\dataset\flowers',
+                                            target_size = (150, 150),
+                                            batch_size = 64,
+                                            class_mode = 'categorical',
+                                            subset = 'validation')
 
-# Part 2: Initialise the CNN model
+#CNN model
 model = Sequential()
+model.add(Convolution2D(32, kernel_size=(3,3), input_shape = (150, 150, 3), activation = 'relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 
-# Step 1 - Add Convolutional layer
-model.add(Convolution2D(16, kernel_size=(3,3), input_shape = (64, 64, 3), activation = 'relu'))
+model.add(Convolution2D(32, kernel_size=(3,3), input_shape = (150, 150, 3), activation = 'relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 
-# Step 2 - Add Pooling layer
-model.add(MaxPooling2D(pool_size = (2, 2)))
-
-# Adding a second convolutional layer and pooling layer
-model.add(Convolution2D(16, kernel_size=(3,3), activation = 'relu'))
-model.add(MaxPooling2D(pool_size = (2, 2)))
+model.add(Convolution2D(64, kernel_size=(3,3), input_shape = (150, 150, 3), activation = 'relu'))
+model.add(MaxPooling2D(pool_size=(2, 2)))
 
 # Step 3 - Flattening
 model.add(Flatten())
 
 # Step 4 - Full connection
-model.add(Dense(output_dim = 128, activation = 'relu'))
-model.add(Dense(output_dim = 5, activation = 'softmax'))
+model.add(Dense(output_dim = 64, activation = 'relu'))
+model.add(Dense(output_dim = 4, activation = 'sigmoid'))
 
 # Compiling the CNN
 model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
@@ -76,10 +78,10 @@ model.summary()
 
 # Part 3 - Fitting the CNN to the images
 History = model.fit_generator(training_set,
-                             samples_per_epoch = 2589,
-                             nb_epoch = 30,
+                             samples_per_epoch = 2496,
+                             nb_epoch = 5,
                              validation_data = validation_set,
-                             nb_val_samples = 868)
+                             nb_val_samples = 623)
 
 # Part 4: Evaluate the model performance
 
