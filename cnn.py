@@ -77,7 +77,7 @@ model.summary()
 # Part 3 - Fitting the CNN to the images
 History = model.fit_generator(training_set,
                              samples_per_epoch = 2589,
-                             nb_epoch = 10,
+                             nb_epoch = 15,
                              validation_data = validation_set,
                              nb_val_samples = 868)
 
