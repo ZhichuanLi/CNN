@@ -55,7 +55,7 @@ validation_datagen = ImageDataGenerator(rescale = 1./255)
 image_size_Arr = [32, 64, 128]
 batch_size_Arr = [16, 32, 64]
 layer_MaxNum = 5
-epoch_MaxNum = 50
+epoch_MaxNum = 3
 
 i = 0   # index of image_size
 j = 0   # index of batch_size
@@ -116,19 +116,19 @@ while i < len(image_size_Arr):
             plt.xlabel('epoch')
             plt.legend(['train', 'validation'], loc='upper left')
             #plt.show()
-            plt.savefig(model_save_path+"\\IG_"+str(image_size_Arr[i])+"_BH_"+str(batch_size_Arr[j])+"_LR_"+str(m+1)+"_EH_"+str(n)+'_plot.png')
+            #plt.savefig(model_save_path+"\\IG_"+str(image_size_Arr[i])+"_BH_"+str(batch_size_Arr[j])+"_LR_"+str(m+1)+"_EH_"+str(epoch_MaxNum)+'_plot.png')
             
             # Step 7: save trained model
             # serialize model to JSON
             model_json = model.to_json()
-            model_json_name ="IG_"+str(image_size_Arr[i])+"_BH_"+str(batch_size_Arr[j])+"_LR_"+str(m)+"_EH_"+str(n)+".json"
+            model_json_name ="IG_"+str(image_size_Arr[i])+"_BH_"+str(batch_size_Arr[j])+"_LR_"+str(m)+"_EH_"+str(epoch_MaxNum)+".json"
             with open(model_save_path+"\\"+model_json_name, "w") as json_file:
                 json_file.write(model_json)
 
             # serialize weights to HDF5
-            model_weight_name = "IG_"+str(image_size_Arr[i])+"_BH_"+str(batch_size_Arr[j])+"_LR_"+str(m)+"_EH_"+str(n)+".h5"
+            model_weight_name = "IG_"+str(image_size_Arr[i])+"_BH_"+str(batch_size_Arr[j])+"_LR_"+str(m)+"_EH_"+str(epoch_MaxNum)+".h5"
             model.save_weights(model_save_path+"\\"+model_weight_name)
-            msg = "Saved cnn model:""IG_"+str(image_size_Arr[i])+"_BH_"+str(batch_size_Arr[j])+"_LR_"+str(m)+"_EH_"+str(n)+" to disk."
+            msg = "Saved cnn model:""IG_"+str(image_size_Arr[i])+"_BH_"+str(batch_size_Arr[j])+"_LR_"+str(m)+"_EH_"+str(epoch_MaxNum)+" to disk."
             print(msg)
                 
             m += 1
