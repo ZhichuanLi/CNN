@@ -54,14 +54,12 @@ validation_datagen = ImageDataGenerator(rescale = 1./255)
 # Total:3 * 3 * 5 = 45 models
 image_size_Arr = [32, 64, 128]
 batch_size_Arr = [16, 32, 64]
-layer_MaxNum = 5
-epoch_MaxNum = 3
+layer_MaxNum = 3
+epoch_MaxNum = 50
 
 i = 0   # index of image_size
-j = 0   # index of batch_size
-m = 1   # index of layers
-
 while i < len(image_size_Arr):
+    j = 0 # index of batch_size
     while j < len(batch_size_Arr):
         # Step 1: Data processing
         #seperating data to training and validation
@@ -75,18 +73,18 @@ while i < len(image_size_Arr):
                                             target_size = (image_size_Arr[i], image_size_Arr[i]),
                                             batch_size = batch_size_Arr[j],
                                             class_mode = 'categorical')
-        
-        
-        # Step 2: Initialise the CNN model
-        model = Sequential()
-        # Add first convolutional layer
-        number_filter = 16    # number of features
-        model.add(Convolution2D(number_filter, kernel_size=(3,3), input_shape = (image_size_Arr[i], image_size_Arr[i], 3), activation = 'relu'))
-        model.add(MaxPooling2D(pool_size = (2, 2)))
+                
         
         #Loop to add more convolutional layers
+        m = 1 # index of layers
         while m <= layer_MaxNum:
             g = 0
+            # Step 2: Initialise the CNN model
+            model = Sequential()
+            # Add first convolutional layer
+            number_filter = 16    # number of features
+            model.add(Convolution2D(number_filter, kernel_size=(3,3), input_shape = (image_size_Arr[i], image_size_Arr[i], 3), activation = 'relu'))
+            model.add(MaxPooling2D(pool_size = (2, 2)))
             while g < len(range(1,m)):
                 model.add(Convolution2D(number_filter * (m*2), kernel_size=(3,3), activation = 'relu'))
                 model.add(MaxPooling2D(pool_size = (2, 2)))
@@ -115,8 +113,8 @@ while i < len(image_size_Arr):
             plt.ylabel('Accuracy')
             plt.xlabel('epoch')
             plt.legend(['train', 'validation'], loc='upper left')
-            #plt.show()
-            #plt.savefig(model_save_path+"\\IG_"+str(image_size_Arr[i])+"_BH_"+str(batch_size_Arr[j])+"_LR_"+str(m+1)+"_EH_"+str(epoch_MaxNum)+'_plot.png')
+            plt.show()
+            #plt.savefig(model_save_path+"\\IG_"+str(image_size_Arr[i])+"_BH_"+str(batch_size_Arr[j])+"_LR_"+str(m+1)+"_EH_"+'_plot.png')
             
             # Step 7: save trained model
             # serialize model to JSON
