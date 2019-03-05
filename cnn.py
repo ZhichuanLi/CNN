@@ -113,8 +113,10 @@ while i < len(image_size_Arr):
             plt.ylabel('Accuracy')
             plt.xlabel('epoch')
             plt.legend(['train', 'validation'], loc='upper left')
-            #plt.show()
-            plt.savefig(model_save_path+"\\IG_"+str(image_size_Arr[i])+"_BH_"+str(batch_size_Arr[j])+"_LR_"+str(m+1)+"_EH_"+'_plot.png')
+                  
+            plt.gcf()            
+            plt.savefig(model_save_path+"\\IG_"+str(image_size_Arr[i])+"_BH_"+str(batch_size_Arr[j])+"_LR_"+str(m)+"_EH_"+str(epoch_MaxNum)+'_plot.png')
+            plt.show()
             plt.clf()
             
             # Step 7: save trained model
