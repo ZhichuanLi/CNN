@@ -54,7 +54,7 @@ validation_datagen = ImageDataGenerator(rescale = 1./255)
 # Total:3 * 3 * 5 = 45 models
 image_size_Arr = [32, 64, 128]
 batch_size_Arr = [16, 32, 64]
-layer_MaxNum = 3
+layer_MaxNum = 3   # layer more than 3 layers, get error
 epoch_MaxNum = 50
 
 i = 0   # index of image_size
@@ -113,8 +113,9 @@ while i < len(image_size_Arr):
             plt.ylabel('Accuracy')
             plt.xlabel('epoch')
             plt.legend(['train', 'validation'], loc='upper left')
-            plt.show()
-            #plt.savefig(model_save_path+"\\IG_"+str(image_size_Arr[i])+"_BH_"+str(batch_size_Arr[j])+"_LR_"+str(m+1)+"_EH_"+'_plot.png')
+            #plt.show()
+            plt.savefig(model_save_path+"\\IG_"+str(image_size_Arr[i])+"_BH_"+str(batch_size_Arr[j])+"_LR_"+str(m+1)+"_EH_"+'_plot.png')
+            plt.clf()
             
             # Step 7: save trained model
             # serialize model to JSON
