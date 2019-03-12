@@ -88,13 +88,17 @@ while i < len(image_size_Arr):
             while g < len(range(1,m)):
                 model.add(Convolution2D(number_filter * (m*2), kernel_size=(3,3), activation = 'relu'))
                 model.add(MaxPooling2D(pool_size = (2, 2)))
+                
                 g += 1
                 
             # Step 3 - Flattening
             model.add(Flatten())
             # Step 4 - Full connection
             model.add(Dense(output_dim = 128, activation = 'relu'))
+            model.add(Dense(output_dim = 128, activation = 'relu'))
+            model.add(Dense(output_dim = 128, activation = 'relu'))
             model.add(Dense(output_dim = 4, activation = 'softmax'))
+
             
             # Step 5: Compiling the CNN
             model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = ['accuracy'])
